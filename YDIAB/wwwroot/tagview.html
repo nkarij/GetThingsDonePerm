@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="styles.css" rel="stylesheet" />
+    <title>index</title>
+</head>
+<body>
+    <h2>Tag Overview</h2>
+
+    <div class="tagview-page-wrapper">
+        <!-- tag page -->
+        <div id="single-tag-wrapper">
+
+            <p class="single-tag__heading"></p>
+            
+            <button type="button" class="single-tag__update">Update tag</button>
+            <a href="" class="single-tag__delete">Delete Tag</a>
+                    
+            <div class="update-tag-section">
+                <h2>Update Task</h2>
+                <form method="post" id="update-tag-form">
+                    <label for="updatetagname">Task:</label>
+                    <input name="updatetagname" type="text">
+                    <button type="button" class="update-tag-button">Submit</button>
+                </form>
+            </div>
+            
+        </div>
+
+    </div>
+    <script src="js/tag-list-script.js"></script>
+</body>
+</html>
