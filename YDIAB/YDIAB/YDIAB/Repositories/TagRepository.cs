@@ -77,13 +77,13 @@ namespace YDIAB.Repositories
         }
 
         // put 
-        public void UpdateTag(UpdateTagInput model)
+        public void UpdateTag(Tag tag)
         {
             //update syntax here
-            var result = _context.ListTags.SingleOrDefault(l => l.Id == model.id);
+            var result = _context.ListTags.SingleOrDefault(l => l.Id == tag.Id);
             if (result != null)
             {
-                result.Name = model.name;
+                result.Name = tag.Name;
                 _context.SaveChanges();
             }
             else

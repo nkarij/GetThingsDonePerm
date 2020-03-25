@@ -7011,11 +7011,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\nkarij\\Documents\\github\\ASP.NET\\Fullstack\\Kopi Til Rasmus\\YDIAB\\YDIAB\\YDIAB.csproj",
+      "projectUniqueName": "C:\\Users\\nkarij\\Documents\\github\\ASP.NET\\Fullstack\\YDIAB\\YDIAB\\YDIAB\\YDIAB.csproj",
       "projectName": "YDIAB",
-      "projectPath": "C:\\Users\\nkarij\\Documents\\github\\ASP.NET\\Fullstack\\Kopi Til Rasmus\\YDIAB\\YDIAB\\YDIAB.csproj",
+      "projectPath": "C:\\Users\\nkarij\\Documents\\github\\ASP.NET\\Fullstack\\YDIAB\\YDIAB\\YDIAB\\YDIAB.csproj",
       "packagesPath": "C:\\Users\\nkarij\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\nkarij\\Documents\\github\\ASP.NET\\Fullstack\\Kopi Til Rasmus\\YDIAB\\YDIAB\\obj\\",
+      "outputPath": "C:\\Users\\nkarij\\Documents\\github\\ASP.NET\\Fullstack\\YDIAB\\YDIAB\\YDIAB\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\nkarij\\AppData\\Roaming\\NuGet\\NuGet.Config",

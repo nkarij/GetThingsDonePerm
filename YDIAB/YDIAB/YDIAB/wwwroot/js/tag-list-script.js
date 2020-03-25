@@ -19,7 +19,8 @@ let tagId = urlParams.get("id");
 })()
 
 
-// kalde functionerne, ligesom i Task-list.
+updateItem();
+removeItem();
 
 function updateItem(){
     let updateButton = document.querySelector(".update-tag-button");

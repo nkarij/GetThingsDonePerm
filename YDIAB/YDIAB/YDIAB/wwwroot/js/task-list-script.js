@@ -64,7 +64,7 @@ function createTag() {
 
 
 function updateTask(){
-    let updateButton = document.querySelector(".single-task__update");
+    let updateButton = document.querySelector(".update-task-button");
     let updateForm = document.querySelector("#update-task-form");
     let intid = parseInt(taskId);
 
@@ -76,8 +76,8 @@ function updateTask(){
             mode: 'cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                id: intid,
-                title: newTitle,
+                Id: intid,
+                Title: newTitle,
             }),
         }).then((response) => {
             return response.json();

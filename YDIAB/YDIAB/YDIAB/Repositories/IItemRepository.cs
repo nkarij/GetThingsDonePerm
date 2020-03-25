@@ -15,7 +15,8 @@ namespace YDIAB.Repositories
         Task<Item> GetItemById(int id, bool includeTags = true);
         //Task<Tag[]> GetTags(int id, bool includeTags = true);
         public void CreateItem(Item item);
-        public void UpdateItemById(UpdateItemInput model);
+        public void UpdateItemById(Item item);
+        //public void UpdateItemById(UpdateItemInput model);
         public void RemoveItemById(int id);
         public bool SaveAll();
 

@@ -16,7 +16,8 @@ namespace YDIAB.Repositories
         Task<Tag[]> GetTags(int id, bool includeTags = true);
 
         void CreateTag(Tag tag);
-        public void UpdateTag(UpdateTagInput model);
+        public void UpdateTag(Tag tag);
+        //public void UpdateTag(UpdateTagInput model);
         public void RemoveTagById(int id);
     }
 }

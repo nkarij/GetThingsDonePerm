@@ -68,16 +68,14 @@ namespace YDIAB.Controllers
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public void Put([FromBody]Item model)
+        public void Put(int id, [FromBody]string value)
         {
-            _itemRepository.UpdateItemById(model);
         }
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            _itemRepository.RemoveItemById(id);
         }
     }
 }

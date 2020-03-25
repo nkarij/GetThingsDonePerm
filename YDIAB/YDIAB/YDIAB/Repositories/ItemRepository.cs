@@ -85,13 +85,13 @@ namespace YDIAB.Repositories
         }
 
         // put 
-        public void UpdateItemById(UpdateItemInput model)
+        public void UpdateItemById(Item item)
         {
             //update syntax here
-            var result = _context.ListItems.SingleOrDefault(i => i.Id == model.id);
+            var result = _context.ListItems.SingleOrDefault(i => i.Id == item.Id);
             if (result != null)
             {
-                result.Title = model.title;
+                result.Title = item.Title;
                 _context.SaveChanges();
             } else
             {
