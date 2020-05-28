@@ -16,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using YDIAB.Models;
 using YDIAB.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace YDIAB.Controllers
 {
@@ -43,19 +44,6 @@ namespace YDIAB.Controllers
 		}
 		public IConfiguration config { get; }
 
-		
-		[HttpGet]
-		public ActionResult Get()
-		{
-			if (this.User.Identity.IsAuthenticated)
-			{
-				return Ok();
-			} else
-			{
-				return BadRequest("login with credentials");
-			}
-		}
-
 		//	THIS IS ONLY USED TO SEED THE TEST USERS ID TO THE LIST WITH ID 1.
 		// ONLY USE THIS ONCE FROM POSTMAN /API/ACCOUNT/ID IF YOU HAVE DROPPED THE DATABASE.
 		// IF YOU HAVE NOT DROPPED THE DATABASE, DONT USE THIS METHOD.
@@ -69,44 +57,112 @@ namespace YDIAB.Controllers
 		//	return Created("", list);
 		//}
 
-		[HttpPost]
-		public async Task<ActionResult> CreateToken([FromBody] StoreUser model)
+		[HttpGet]
+		[Route("[action]")]
+		public ActionResult Login()
 		{
-			if (ModelState.IsValid)
+			if (this.User.Identity.IsAuthenticated)
 			{
-				var user = await _userManager.FindByNameAsync(model.UserName);
-				if (user != null)
+				return Ok();
+			}
+			else
+			{
+				return BadRequest("login with credentials");
+			}
+		}
+
+		//public class LoginCredentials
+		//{
+		//	public string username { get; set; }
+
+		//	public string password { get; set; }
+		//	public bool rememberUser { get; set; }
+		//}
+
+
+		//[HttpPost]
+		//public async Task<ActionResult> LoginAsync([FromBody]LoginCredentials user)
+		//{
+		//	try
+		//	{
+		//		//PasswordSignInAsync (string userName, string password, bool isPersistent, bool lockoutOnFailure);
+		//		var result = await _signInManager.PasswordSignInAsync(user.username, user.password, user.rememberUser, false);
+		//		if (result.Succeeded)
+		//		{
+		//			// should pass this? to some repository, maybe the ListRepository?
+		//			return Ok();
+		//		} else
+		//		{
+		//			return this.StatusCode(StatusCodes.Status401Unauthorized, "Unauthorized request");
+		//		}
+		//	}
+		//	catch (Exception)
+		//	{
+
+		//		throw new Exception("error");
+		//	}
+		//}
+
+		// this is effectively the login method.
+		[HttpPost]
+		[Route("[action]")]
+		public async Task<ActionResult> CreateToken([FromBody] StoreUser userModel)
+		{
+		
+				if (ModelState.IsValid)
 				{
-					var claims = new[]
+					//var user = await _userManager.FindByNameAsync(userModel.UserName);
+					var user = await _userManager.FindByEmailAsync(userModel.UserName);
+				if (user != null)
 					{
-					new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-					new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-					//new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
-				};
+						// i dont know if the login should be placed in here, or they token plus login be seperated into 2 methods, 
+						// but the methods are called in the same place. Returns false???
+						var signIn = await _signInManager.CheckPasswordSignInAsync(user, user.Password, false);
+						if (signIn.Succeeded) {
+						// sub = subject
+						// Jti = 
+							var claims = new[]
+								{
+								new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+								new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+								new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
+								};
 
-					var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
-					var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+								var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
+								var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-					var token = new JwtSecurityToken(
-					  _config["Tokens:Issuer"],
-					  _config["Tokens:Audience"],
-					  claims,
-					  expires: DateTime.Now.AddMinutes(30),
-					  signingCredentials: creds
-					  );
+								var token = new JwtSecurityToken(
+								  _config["Tokens:Issuer"],
+								  _config["Tokens:Audience"],
+								  claims,
+								  expires: DateTime.Now.AddMinutes(30),
+								  signingCredentials: creds
+								  );
 
-					var results = new
-					{
-						token = new JwtSecurityTokenHandler().WriteToken(token),
-						expiration = token.ValidTo
-					};
+								var results = new
+								{
+									token = new JwtSecurityTokenHandler().WriteToken(token),
+									expiration = token.ValidTo
+								};
 
-					return Created("", results);
+								return Created("", results);
 
+						}
+					return BadRequest();
 				}
+
+				return BadRequest();
 			}
 
 			return BadRequest();
 		}
-	}
+		
+		[HttpGet]
+		[Route("[action]")]
+		public async Task<ActionResult> Logout()
+		{
+			await _signInManager.SignOutAsync();
+			return RedirectToAction("Account", "CreateToken");
+		}
+	} // controller ends
 }

@@ -18,12 +18,15 @@ namespace YDIAB.Repositories
             _context = context;
         }
 
-        // get
+
+        // this works fine
         public IEnumerable<List> GetAllLists()
         {
             return _context.Lists;
         }
 
+
+        // this works fine
         public IEnumerable<List> GetAllListsByUserName(string username)
         {
             var result = _context.Lists.Where(l => l.User.UserName == username);

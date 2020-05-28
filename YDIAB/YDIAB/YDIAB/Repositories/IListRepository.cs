@@ -12,8 +12,8 @@ namespace YDIAB.Repositories
 
         IEnumerable<List> GetAllLists();
 
-        IEnumerable<List> GetAllListsByUserName(string username);
-        Task<List> GetList(int id, bool includeTasks = true);
+        public IEnumerable<List> GetAllListsByUserName(string username);
+        public Task<List> GetList(int id, bool includeTasks = true);
 
         //Task<Item[]> GetItems(int id, bool includeTags = true);
 

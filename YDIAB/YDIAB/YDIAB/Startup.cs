@@ -35,7 +35,7 @@ namespace YDIAB
         }
 
         // I have made this a small case from big case, dont know if this is important.
-        public IConfiguration configuration { get; }
+        //public IConfiguration configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -44,28 +44,27 @@ namespace YDIAB
             services.AddIdentity<StoreUser, IdentityRole>(cfg =>
             {
                 cfg.User.RequireUniqueEmail = true;
-            })
-                .AddEntityFrameworkStores<AppDbContext>();
+            }).AddEntityFrameworkStores<AppDbContext>();
 
             services.AddAuthentication()
-                    .AddCookie()
-                    .AddJwtBearer(cfg =>
-                    {
-                        cfg.TokenValidationParameters = new TokenValidationParameters()
-                        {
-                            NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
-                            ValidIssuer = _config["Tokens:Issuer"],
-                            ValidAudience = _config["Tokens:Audience"],
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]))
-                        };
-                    });
+             .AddCookie()
+             .AddJwtBearer(cfg =>
+             {
+                 cfg.TokenValidationParameters = new TokenValidationParameters()
+                 {
+                     ValidIssuer = _config["Tokens:Issuer"],
+                     ValidAudience = _config["Tokens:Audience"],
+                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]))
+                 };
+
+             });
 
             services.AddDbContext<AppDbContext>(cfg =>
             {
                 cfg.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
             });
 
-            
+            //services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddScoped<IListRepository, ListRepository>();
             services.AddScoped<IItemRepository, ItemRepository>();
             services.AddScoped<ITagRepository, TagRepository>();
@@ -85,6 +84,7 @@ namespace YDIAB
         {
             if (env.IsDevelopment())
             {
+                
                 app.UseDeveloperExceptionPage();
             } else
             {
@@ -101,15 +101,14 @@ namespace YDIAB
             //app.UseCookiePolicy();
 
             // requires install of nuget packet: usenodemodules
-            //app.UseNodeModules();
-
-            //must be before routing
-            app.UseAuthentication();           
-            // should be between routing and endpoints.
+            app.UseNodeModules();
 
             app.UseRouting();
 
+            //must be before routing
             app.UseAuthorization();
+            app.UseAuthentication();
+            // should be between routing and endpoints.
 
             app.UseEndpoints(endpoints =>
             {

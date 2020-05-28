@@ -37,19 +37,21 @@ namespace YDIAB.Controllers
             _userManager = userManager;
         }
 
+        // this works fine
         // GET: api/<controller>
+        [Route("[action]")]
         [HttpGet]
         public ActionResult GetAllLists()
         {
             try
             {
-                // userName is not working ;/
-                var userName = this.User.Identity.Name;
-                if(this.User.Identity.IsAuthenticated && userName != null)
+                if (this.User.Identity.IsAuthenticated)
                 {
-                    var result = _listRepository.GetAllListsByUserName(userName);
+                    var result = _listRepository.GetAllLists();
+                    //return Ok(result);
                     return Ok(result);
-                } else
+                }
+                else
                 {
                     return this.StatusCode(StatusCodes.Status401Unauthorized, "Unauthorized request");
                 }
@@ -61,7 +63,37 @@ namespace YDIAB.Controllers
             }
         }
 
+
+        // this works fine
+        // GET: api/<controller>
+        [HttpGet]
+        public ActionResult GetAllListsByUser()
+        {
+            try
+            {
+                // userName is not working ;/
+                var userName = this.User.Identity.Name;
+                if (this.User.Identity.IsAuthenticated && userName != null)
+                {
+                    var result = _listRepository.GetAllListsByUserName(userName);
+                    return Ok(result);
+                }
+                else
+                {
+                    return this.StatusCode(StatusCodes.Status401Unauthorized, "Unauthorized request");
+                }
+            }
+            catch (Exception)
+            {
+
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+
+
+
         // GET api/<controller>/1
+        // this works fine, except the itemlist is empty, do I have to add items before its full?
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ListRessource>> GetList(int id, bool includeTasks = true)
         {

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\nkarij\\Documents\\github\\ASP.NET\\Fullstack\\YDIAB\\YDIAB\\YDIAB\\YDIAB.csproj": {}
+    "C:\\Users\\nkarij\\Documents\\github\\ASP.NET\\Fullstack\\GetThingsDonePerm\\YDIAB\\YDIAB\\YDIAB\\YDIAB.csproj": {}
   },
   "projects": {
-    "C:\\Users\\nkarij\\Documents\\github\\ASP.NET\\Fullstack\\YDIAB\\YDIAB\\YDIAB\\YDIAB.csproj": {
+    "C:\\Users\\nkarij\\Documents\\github\\ASP.NET\\Fullstack\\GetThingsDonePerm\\YDIAB\\YDIAB\\YDIAB\\YDIAB.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\nkarij\\Documents\\github\\ASP.NET\\Fullstack\\YDIAB\\YDIAB\\YDIAB\\YDIAB.csproj",
+        "projectUniqueName": "C:\\Users\\nkarij\\Documents\\github\\ASP.NET\\Fullstack\\GetThingsDonePerm\\YDIAB\\YDIAB\\YDIAB\\YDIAB.csproj",
         "projectName": "YDIAB",
-        "projectPath": "C:\\Users\\nkarij\\Documents\\github\\ASP.NET\\Fullstack\\YDIAB\\YDIAB\\YDIAB\\YDIAB.csproj",
+        "projectPath": "C:\\Users\\nkarij\\Documents\\github\\ASP.NET\\Fullstack\\GetThingsDonePerm\\YDIAB\\YDIAB\\YDIAB\\YDIAB.csproj",
         "packagesPath": "C:\\Users\\nkarij\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\nkarij\\Documents\\github\\ASP.NET\\Fullstack\\YDIAB\\YDIAB\\YDIAB\\obj\\",
+        "outputPath": "C:\\Users\\nkarij\\Documents\\github\\ASP.NET\\Fullstack\\GetThingsDonePerm\\YDIAB\\YDIAB\\YDIAB\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\nkarij\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -60,11 +60,15 @@
             },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[3.1.1, )"
+              "version": "[3.0.0, )"
             },
             "Microsoft.AspNetCore.Mvc.Core": {
               "target": "Package",
               "version": "[2.2.5, )"
+            },
+            "Microsoft.AspNetCore.NodeServices": {
+              "target": "Package",
+              "version": "[3.1.3, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -85,6 +89,14 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[3.1.1, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.2, )"
+            },
+            "OdeToCode.UseNodeModules": {
+              "target": "Package",
+              "version": "[3.0.0, )"
             }
           },
           "imports": [

@@ -41,13 +41,14 @@ namespace YDIAB.Data
             {
                 FirstName = "Nanna",
                 LastName = "Jensen",
-                UserName = "tester",
+                UserName = "tester@test.com",
+                Password = "nanna1234",
                 Email = "tester@test.com",
                 NormalizedEmail = "tester@test.com",
                 NormalizedUserName = "tester",
                 EmailConfirmed = true,
                 PhoneNumber = "123456789",
-                PhoneNumberConfirmed = false
+                PhoneNumberConfirmed = false,
             };
 
             PasswordHasher<StoreUser> ph = new PasswordHasher<StoreUser>();
