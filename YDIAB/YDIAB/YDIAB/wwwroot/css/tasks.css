@@ -1,0 +1,11 @@
+﻿
+
+.update-task-section {
+    display: none;
+}
+
+
+.update-task-section--active {
+    display: block;
+    background-color: blue;
+}

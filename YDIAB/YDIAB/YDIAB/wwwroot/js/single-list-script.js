@@ -1,114 +1,123 @@
 let urlParams = (new URL(document.location)).searchParams;
-console.log(urlParams)
+//console.log(urlParams)
 let listId = urlParams.get("id");
-console.log(listId);
+//console.log(listId);
+let intid = parseInt(listId);
+let activateUpdateListButton = document.querySelector(".single-list__update");
+let updateListSection = document.querySelector(".update-list-section");
+let updateForm = document.querySelector("#update-list-form");
 
-
-(function outPutSingleList() {
+// this works fine
+outPutSingleList();
+async function outPutSingleList() {
 
     let heading = document.querySelector(".single-list__heading");
     // let deleteButton = document.querySelector(".single-list__delete");
     let taskList = document.querySelector(".single-list__task-list");
-    let intid = parseInt(listId);
+    
+    
+    let data = await simpleGet('http://localhost:5000/api/lists/' + intid);
+    console.log(data);
+    let list = data;
 
-    fetch('http://localhost:5000/api/lists/' + intid)
-        .then((response) => {
-            return response.json();
-        })
-        .then((json) => {
-            console.log("list", json);
-            let list = json;
-            heading.textContent = list.name;
-            list.itemList.forEach(item => {
-                 let listElement = document.createElement("li");
-                 listElement.innerText = item.title;
-                 let linkElement = document.createElement("a");
-                 linkElement.innerText = "Manage Task";
-                 linkElement.href = `/taskview.html?id=${item.id}`;;
-                 linkElement.classList.add("row");
-                 listElement.appendChild(linkElement);
-                 taskList.appendChild(listElement);
-             })
-        });
-})();
+    taskList.innerHTML = "";
+    heading.textContent = list.name;
+    list.itemList.forEach(item => {
+        let listElement = document.createElement("li");
+        listElement.innerText = item.title;
+        let linkElement = document.createElement("a");
+        linkElement.innerText = "Manage Task";
+        linkElement.href = `/taskview.html?id=${item.id}`;;
+        linkElement.classList.add("row");
+        let checkboxElement = document.createElement("input");
+        checkboxElement.type = "checkbox";
+        checkboxElement.className = "task__checkbox";
+        checkboxElement.checked = item.isDone;
+        listElement.appendChild(linkElement);
+        listElement.appendChild(checkboxElement);
+        taskList.appendChild(listElement);
+    })
+}
+
+// UPDATE: 
+
+activateUpdateListButton.addEventListener('click', () => {
+    // show or hide update section.
+    updateListSection.classList.toggle("update-list-section--active");
+});
+
+// virker
+function updateList(){
+    let updateButton = document.querySelector(".update-list-button");
+
+    updateButton.addEventListener('click', async (e) => {
+        let newName = updateForm.updatelistname.value;
+        let newDescription = updateForm.updatelistdescrip.value;
+        let newList = {
+            Id: intid,
+            Name: newName,
+            Description: newDescription,
+        }
+
+        let data = await putBodyToUrl('http://localhost:5000/api/lists', newList);
+        console.log(data);
+    })
+}
 
 
-createTask();
-updateItem();
-removeItem();
-
+// virker
 function createTask() {
 
     let createButton = document.querySelector(".create-task-button");
     let createForm = document.querySelector("#create-task-form");
-    let intid = parseInt(listId);
-    createButton.addEventListener('click', (e) => {
+
+    createButton.addEventListener('click', async (e) => {
         e.preventDefault();
 
         let taskTitle = createForm.createtaskname.value;
         console.log(taskTitle);
-        fetch('http://localhost:5000/api/items', {
-            method: 'POST',
-            mode: 'cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                Title: taskTitle,
-                ListId : intid
-            }),
-        }).then((response) => {
-            console.log(response.status);
-            return response.json();
-        }).then((response) => {
-            console.log("response", response);
-        }).catch(error => console.log(error))
+        let newTask = {
+            ListId: intid,
+            Title: taskTitle           
+        }
+
+        let data = await postBodyToUrl('http://localhost:5000/api/items', newTask);
+        outPutSingleList();
     })
 }
 
-
-function updateItem(){
-    let updateButton = document.querySelector(".update-list-button");
-    let updateForm = document.querySelector("#update-list-form");
-    let intid = parseInt(listId);
-
-    updateButton.addEventListener('click', (e) => {
-        let newName = updateForm.updatelistname.value;
-        let newDescription = updateForm.updatelistdescrip.value;
-
-        fetch('http://localhost:5000/api/lists', {
-            method: 'PUT',
-            mode: 'cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                Id: intid,
-                Name: newName,
-                Description : newDescription,
-            }),
-        }).then((response) => {
-            return response.json();
-        }).then((response) => {
-            console.log("data", response);
-        }).catch(error => console.log(error))
-
-    })
-}
-
-
-function removeItem() {
+// virker
+function removeList() {
 
     let removeButton = document.querySelector(".single-list__delete");
     console.log(removeButton);
-    removeButton.addEventListener('click', (e) => {
+    let intid = parseInt(listId);
+    removeButton.addEventListener('click', async (e) => {
         e.preventDefault();
-        fetch('http://localhost:5000/api/lists/' + listId, {
-            method: 'DELETE',
-            mode: 'cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(),
-        }).then((response) => {
-            // console.log(response.status);
-            return response.json();
-        }).then((response) => {
-            console.log("response", response);
-        }).catch(error => console.log(error))
+
+        let data = await deleteItemById('http://localhost:5000/api/lists/' + intid);
+        console.log("list remove item", data);
+        location.href = "../alllists.html";
     })
 }
+function logoutUser() {
+    let logoutButton = document.querySelector(".logout-button");
+    console.log("button 1", logoutButton);
+    logoutButton.addEventListener('click', async (e) => {
+        console.log("button", logoutButton);
+        let result = await logOutUser('/api/account/logout');
+        console.log("logout", result);
+        if (result == 200) {
+            location.href = "../index.html";
+            deleteSession();
+        }
+    })
+}
+
+
+
+logoutUser();
+createTask();
+updateList();
+removeList();
+

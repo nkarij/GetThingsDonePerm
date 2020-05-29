@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link href="styles.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
     <title>index</title>
 </head>
 <body>
+    <nav>
+        <a href="alllists.html">Home</a>
+    </nav>
+
     <h2>Task Overview</h2>
 
     <div class="taskview-page-wrapper">
@@ -12,13 +16,13 @@
         <div id="single-task-wrapper">
 
             <h2 class="single-task__heading"></h2>
-            
+
             <button type="button" class="single-task__update">Update Task</button>
             <a href="" class="single-task__delete">Delete Task</a>
-                    
+
             <div class="update-task-section">
                 <h3>Update Task</h3>
-                <form method="post" id="update-task-form">
+                <form method="post" id="update-task-form" class="update-task-form">
                     <label for="updatetaskname">Title:</label>
                     <input name="updatetaskname" type="text">
                     <button type="button" class="update-task-button">Submit</button>
@@ -33,13 +37,15 @@
                     <button type="button" class="create-tag-button">Submit</button>
                 </form>
             </div>
-    
-            <ul class="single-task__tag-list">
 
+            <ul class="single-task__tag-list">
             </ul>
         </div>
 
     </div>
+
+    <script src="js/helpers.js"></script>
+    <script src="js/fetches.js"></script>
     <script src="js/task-list-script.js"></script>
 </body>
 </html>

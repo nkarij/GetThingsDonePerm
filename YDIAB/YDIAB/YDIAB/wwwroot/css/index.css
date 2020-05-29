@@ -1,0 +1,14 @@
+﻿
+
+.index-page-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+
+#auth-form, #register-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-right: 20px;
+}

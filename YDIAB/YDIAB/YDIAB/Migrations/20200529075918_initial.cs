@@ -185,7 +185,8 @@ namespace YDIAB.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(nullable: true),
                     IsDone = table.Column<bool>(nullable: false),
-                    ListId = table.Column<int>(nullable: false)
+                    ListId = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -196,6 +197,12 @@ namespace YDIAB.Migrations
                         principalTable: "Lists",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ListItems_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -205,7 +212,9 @@ namespace YDIAB.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
-                    ItemId = table.Column<int>(nullable: false)
+                    ItemId = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    ListId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -216,12 +225,24 @@ namespace YDIAB.Migrations
                         principalTable: "ListItems",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ListTags_Lists_ListId",
+                        column: x => x.ListId,
+                        principalTable: "Lists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ListTags_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "Password", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RememberUser", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "db044848-049a-4d0b-8067-8ba191709b1e", 0, "f6a063b6-044a-42cf-945d-fe17db3ebf7a", "tester@test.com", true, "Nanna", "Jensen", false, null, "tester@test.com", "tester", "nanna1234", "AQAAAAEAACcQAAAAECSBAeWC8IvkQbddQvF0ELUme+HuRDSI+LaUKzYSkQg1tcAlxYNVkoDHbheaLo1rIA==", "123456789", false, false, "08e73a9c-4bdc-498a-8c7d-e86f3fe381ff", false, "tester@test.com" });
+                values: new object[] { "17568fe9-1e12-4033-8e1f-a982fab01231", 0, "9b53df1a-455c-4ec8-a982-604d44638bd3", "tester@test.com", true, "Nanna", "Jensen", false, null, "tester@test.com", "tester", "nanna1234", "AQAAAAEAACcQAAAAEBFoMImR45wG2aWIOFGJvnM+4XNnxBWl7zQDAc1LsTq0lkNT2a1qrix2jkKNuCfaCg==", "123456789", false, false, "733bd005-5908-46e3-ab33-3ba0460ff0d5", false, "tester@test.com" });
 
             migrationBuilder.InsertData(
                 table: "Lists",
@@ -273,6 +294,11 @@ namespace YDIAB.Migrations
                 column: "ListId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ListItems_UserId",
+                table: "ListItems",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Lists_UserId",
                 table: "Lists",
                 column: "UserId");
@@ -281,6 +307,16 @@ namespace YDIAB.Migrations
                 name: "IX_ListTags_ItemId",
                 table: "ListTags",
                 column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ListTags_ListId",
+                table: "ListTags",
+                column: "ListId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ListTags_UserId",
+                table: "ListTags",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

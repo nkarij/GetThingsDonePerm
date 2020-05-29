@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using YDIAB.Models;
 using YDIAB.Repositories;
 using YDIAB.Ressources;
@@ -20,13 +21,19 @@ namespace YDIAB.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ItemsController : ControllerBase
     {
+        private readonly ILogger<ItemsController> _logger;
         private readonly IItemRepository _itemRepository;
         private readonly IMapper _mapper;
 
-        public ItemsController(IItemRepository itemRepository, IMapper mapper)
+        public ItemsController(
+            ILogger<ItemsController> logger, 
+            IItemRepository itemRepository, 
+            IMapper mapper)
         {
+            
             _itemRepository = itemRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
 
@@ -40,7 +47,7 @@ namespace YDIAB.Controllers
                 var userName = this.User.Identity.Name;
                 if (this.User.Identity.IsAuthenticated && userName != null)
                 {
-                    var result = await _itemRepository.GetItemById(id, true);
+                    var result = await _itemRepository.GetItemById(id, includeTags);
                     var ressource = _mapper.Map<ItemRessource>(result);
                     return ressource;
                 }
@@ -57,25 +64,20 @@ namespace YDIAB.Controllers
         }
 
 
-        // GET api/<controller>/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
 
         // POST api/<controller>
+        // works fine
         [HttpPost]
         public ActionResult Post([FromBody]Item model)
         {
             try
             {
-                // userName is not working ;/
+                
                 var userName = this.User.Identity.Name;
                 if (this.User.Identity.IsAuthenticated && userName != null)
                 {
                     // call repo here, pass model
-                    _itemRepository.CreateItem(model);
+                    _itemRepository.CreateItem(model, userName);
                     return Ok();
                 }
                 else
@@ -90,33 +92,76 @@ namespace YDIAB.Controllers
         }
 
         // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public ActionResult Put([FromBody]Item model)
+        // works fine
+        [HttpPut]
+
+        public ActionResult<Item> Put([FromBody]Item model)
         {
             // userName is not working ;/
             var userName = this.User.Identity.Name;
-            if (this.User.Identity.IsAuthenticated && userName != null)
+            try
             {
-                _itemRepository.UpdateItemById(model);
-                return Ok();
+                if (this.User.Identity.IsAuthenticated && userName != null)
+                {
+                    var result = _itemRepository.UpdateItemByModel(model);
+                    return Ok(result);
+                }
+                else
+                {
+                    return this.StatusCode(StatusCodes.Status401Unauthorized, "Unauthorized request");
+                }
+
             }
-            else
+            catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status401Unauthorized, "Unauthorized request");
+
+                _logger.LogError($"Failed to updage task: {ex}");
             }
-            
+
+            return BadRequest("Failed to update Task");
+
+
+        }
+
+        [HttpPut]
+        [Route("[action]")]
+        public ActionResult<Item> PutSelectedItem([FromBody]Item model)
+        {
+            // userName is not working ;/
+            var userName = this.User.Identity.Name;
+            try
+            {
+                if (this.User.Identity.IsAuthenticated && userName != null)
+                {
+                    var result = _itemRepository.UpdateSelectedItem(model);
+                    return Ok(result);
+                }
+                else
+                {
+                    return this.StatusCode(StatusCodes.Status401Unauthorized, "Unauthorized request");
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError($"Failed to updage task: {ex}");
+            }
+
+            return BadRequest("Failed to update Task");
         }
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public ActionResult<Item> Delete(int id)
         {
             // userName is not working ;/
             var userName = this.User.Identity.Name;
             if (this.User.Identity.IsAuthenticated && userName != null)
             {
-                _itemRepository.RemoveItemById(id);
-                return Ok();
+                var result = _itemRepository.RemoveItemById(id);
+                // returning listId
+                return Ok(result.ListId);
             }
             else
             {

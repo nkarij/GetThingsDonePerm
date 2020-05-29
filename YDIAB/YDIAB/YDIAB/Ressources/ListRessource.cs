@@ -16,5 +16,7 @@ namespace YDIAB.Ressources
         public string Description { get; set; }
 
         public ICollection<ItemRessource> ItemList { get; set; }
+
+        public ICollection<TagRessource> TagList { get; set; }
     }
 }

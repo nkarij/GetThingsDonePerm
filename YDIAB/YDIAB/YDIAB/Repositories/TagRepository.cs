@@ -93,11 +93,12 @@ namespace YDIAB.Repositories
         }
 
         // delete
-        public void RemoveTagById(int id)
+        public Tag RemoveTagById(int id)
         {
             var removeTag = _context.ListTags.SingleOrDefault(i => i.Id == id);
             var result = _context.ListTags.Remove(removeTag);
             _context.SaveChanges();
+            return removeTag;
         }
 
 

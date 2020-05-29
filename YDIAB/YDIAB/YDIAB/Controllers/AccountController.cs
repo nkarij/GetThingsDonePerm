@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -16,12 +17,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using YDIAB.Models;
 using YDIAB.Data;
-using Microsoft.AspNetCore.Http;
+using YDIAB.Repositories;
 
 namespace YDIAB.Controllers
 {
 	[Route("api/[controller]")]
-	//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class AccountController : Controller
 	{
 		private readonly ILogger<AccountController> _logger;
@@ -29,8 +29,11 @@ namespace YDIAB.Controllers
 		private readonly UserManager<StoreUser> _userManager;
 		private readonly IConfiguration _config;
 		private readonly AppDbContext _context;
+		private readonly IAccountRepository _accountRepository;
+
 
 		public AccountController(ILogger<AccountController> logger,
+			IAccountRepository accountRepository,
 			AppDbContext context,
 			SignInManager<StoreUser> signInManager,
 			UserManager<StoreUser> userManager,
@@ -41,12 +44,14 @@ namespace YDIAB.Controllers
 			_userManager = userManager;
 			_config = config;
 			_context = context;
+			_accountRepository = accountRepository;
 		}
 		public IConfiguration config { get; }
 
 		//	THIS IS ONLY USED TO SEED THE TEST USERS ID TO THE LIST WITH ID 1.
 		// ONLY USE THIS ONCE FROM POSTMAN /API/ACCOUNT/ID IF YOU HAVE DROPPED THE DATABASE.
 		// IF YOU HAVE NOT DROPPED THE DATABASE, DONT USE THIS METHOD.
+
 		//[HttpGet("{id:int}")]
 		//public async Task<ActionResult> ConnectListAndUser(int id)
 		//{
@@ -56,6 +61,7 @@ namespace YDIAB.Controllers
 		//	_context.SaveChanges();
 		//	return Created("", list);
 		//}
+
 
 		[HttpGet]
 		[Route("[action]")]
@@ -71,37 +77,32 @@ namespace YDIAB.Controllers
 			}
 		}
 
-		//public class LoginCredentials
-		//{
-		//	public string username { get; set; }
-
-		//	public string password { get; set; }
-		//	public bool rememberUser { get; set; }
-		//}
-
-
 		//[HttpPost]
-		//public async Task<ActionResult> LoginAsync([FromBody]LoginCredentials user)
+		//[Route("[action]")]
+		//public async Task<ActionResult> RegisterUser([FromBody] StoreUser model)
 		//{
-		//	try
-		//	{
-		//		//PasswordSignInAsync (string userName, string password, bool isPersistent, bool lockoutOnFailure);
-		//		var result = await _signInManager.PasswordSignInAsync(user.username, user.password, user.rememberUser, false);
-		//		if (result.Succeeded)
-		//		{
-		//			// should pass this? to some repository, maybe the ListRepository?
-		//			return Ok();
-		//		} else
-		//		{
-		//			return this.StatusCode(StatusCodes.Status401Unauthorized, "Unauthorized request");
-		//		}
-		//	}
-		//	catch (Exception)
-		//	{
 
-		//		throw new Exception("error");
-		//	}
 		//}
+
+
+		[HttpPost]
+		[Route("[action]")]
+		public ActionResult RegisterUser([FromBody] StoreUser model)
+		{
+			try
+			{
+				_accountRepository.registerUserInDb(model);
+				return Ok();
+
+			}
+			catch (Exception ex)
+			{
+
+				_logger.LogError($"Failed to register user :{ex}");
+			}
+
+			return BadRequest("failed to register user");
+		}
 
 		// this is effectively the login method.
 		[HttpPost]
@@ -157,12 +158,55 @@ namespace YDIAB.Controllers
 			return BadRequest();
 		}
 		
+		//[HttpGet]
+		//[Route("[action]")]
+		//public async Task<ActionResult> Logout()
+		//{
+		//	await _signInManager.SignOutAsync();
+		//	return RedirectToAction("Account", "CreateToken");
+		//}
+
 		[HttpGet]
 		[Route("[action]")]
 		public async Task<ActionResult> Logout()
 		{
-			await _signInManager.SignOutAsync();
-			return RedirectToAction("Account", "CreateToken");
+			try
+			{
+				await _signInManager.SignOutAsync();
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+
+				_logger.LogError("failed to sign out user" + ex);
+			}
+
+			return BadRequest();
 		}
+
+
+		//[HttpPost]
+		//[Route("[action]")]
+		//public async Task<ActionResult> RemoveUser([FromBody] StoreUser model)
+		//{
+
+		//	var user = await _userManager.FindByEmailAsync(model.UserName);
+		//	if(user != null)
+		//	{
+		//		IdentityResult result = await _userManager.DeleteAsync(user);
+		//		if (result.Succeeded)
+		//		{
+		//			return Ok();
+		//		}
+		//		else
+		//		{
+		//			return BadRequest("user not deleted");
+		//		}
+		//	}
+		//	return BadRequest("user not found");
+
+		//}
+
+
 	} // controller ends
 }

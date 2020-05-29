@@ -19,6 +19,8 @@ namespace YDIAB.Models
         // navigation object...
         public List List { get; set; }
 
+        public StoreUser User { get; set; }
+
         // 1-to-many relation
         public ICollection<Tag> Tags { get; set; }
 

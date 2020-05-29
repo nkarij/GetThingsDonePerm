@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using YDIAB.Data;
 using YDIAB.Models;
+using System.Security.Claims;
 
 namespace YDIAB.Repositories
 {
@@ -70,19 +71,21 @@ namespace YDIAB.Repositories
 
 
 
-        // post
-        public void CreateList(List list)
+        public ICollection<List> CreateList(List list, string username, StoreUser user)
         {
             var newList = new List();
             newList.Name = list.Name;
             newList.Description = list.Description;
-            var addTask = _context.Lists.Add(newList);
+            newList.User = user;
+            _context.Add(newList);
             _context.SaveChanges();
+            var result = _context.Lists.Where(l => l.User.UserName == username).ToList();
+            return result;
         }
 
 
         // put 
-        public void UpdateList(List list)
+        public List UpdateList(List list)
         {
             //update syntax here
             var result = _context.Lists.SingleOrDefault(i => i.Id == list.Id);
@@ -91,24 +94,36 @@ namespace YDIAB.Repositories
                 result.Name = list.Name;
                 _context.SaveChanges();
 
-                if(list.Description != null)
+                if (list.Description != null)
                 {
                     result.Description = list.Description;
                     _context.SaveChanges();
+                    return result;
                 }
+                return result;
             }
             else
             {
-                throw new Exception("Update List failed");
+                throw new Exception("Update List failed, server side");
             }
         }
 
         // delete
-        public void RemoveListById(int id)
+        public ICollection<List> RemoveListById(int id, string username)
         {
+
             var removeList = _context.Lists.SingleOrDefault(i => i.Id == id);
-            var result = _context.Lists.Remove(removeList).Entity;
-            _context.SaveChanges();
+            if(removeList.User.UserName == username)
+            {
+                var result = _context.Lists.Remove(removeList).Entity;
+                _context.SaveChanges();
+                var lists = _context.Lists.Where(l => l.User.UserName == username).ToList();
+                return lists;
+            } else
+            {
+                throw new Exception("user is not authorized to delete list");
+            }
+
         }
 
         // save 

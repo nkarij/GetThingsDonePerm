@@ -1,0 +1,9 @@
+﻿
+
+.update-list-section {
+    display: none;
+}
+
+.update-list-section--active {
+    display: block;
+}

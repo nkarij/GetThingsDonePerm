@@ -12,9 +12,13 @@ namespace YDIAB.Models
 
         public string Name { get; set; }
 
+        //public int ListId { get; set; }
+
         public int ItemId { get; set; }
 
         public Item Item { get; set; }
+
+        public StoreUser User { get; set; }
 
     }
 }

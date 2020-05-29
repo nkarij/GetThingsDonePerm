@@ -1,10 +1,18 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <link href="styles.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
     <title>index</title>
 </head>
 <body>
+    <nav>
+        <a href="alllists.html">Home</a>
+        <button type="button" class="logout-button"> Log Out </button>
+        <div>
+            <a href="removeuser.html">Delete Account</a>
+        </div>
+    </nav>
+
     <h2>To Do List</h2>
 
     <div class="page-wrapper">
@@ -22,15 +30,19 @@
             <h2>Create New List</h2>
             <form method="post" id="create-list-form">
                 <label for="createlistname">Name:</label>
-                <input name="createlistname" type="text">
+                <input name="createlistname" type="text" required>
                 <label for="createlistdescript">Description:</label>
-                <input name="createlistdescript" type="text">
+                <input name="createlistdescript" type="text" required>
                 <button type="button" class="create-list-button">Submit</button>
             </form>
         </div>
 
+
     </div>
 
+    <script src="js/helpers.js"></script>
+    <script src="js/fetches.js"></script>
     <script src="js/multi-list-script.js"></script>
+
 </body>
 </html>

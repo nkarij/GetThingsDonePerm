@@ -56,6 +56,7 @@ namespace YDIAB.Controllers
         }
 
         //GET: api/<controller>
+        //virker fint.
         [HttpGet("{id:int}")]
         public ActionResult<Tag> GetById(int id)
         {
@@ -81,6 +82,7 @@ namespace YDIAB.Controllers
         }
 
         // POST api/<controller>
+        // virker fint
         [HttpPost]
         public ActionResult Post([FromBody]Tag model)
         {
@@ -109,7 +111,12 @@ namespace YDIAB.Controllers
 
 
         // PUT api/<controller>/5
-        [HttpPut("{id}")]
+        // virker fint
+        // TODO : Mangler at implementere try catch. 
+        // TODO: SKal også sætte tags op til at referere til listId.
+        // TODO: LIste med alle tasks plus tags.
+        // TODO: Task som kan tjekkes af (done).
+        [HttpPut]
         public ActionResult Put([FromBody]Tag model)
         {
             // userName is not working ;/
@@ -129,15 +136,15 @@ namespace YDIAB.Controllers
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public ActionResult<Tag> Delete(int id)
         {
             // userName is not working ;/
             var userName = this.User.Identity.Name;
             if (this.User.Identity.IsAuthenticated && userName != null)
             {
                 // call repo here, pass model
-                _tagRepository.RemoveTagById(id);
-                return Ok();
+                var result = _tagRepository.RemoveTagById(id);
+                return Ok(result.ItemId);
             }
             else
             {

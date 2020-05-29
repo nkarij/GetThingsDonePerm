@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using YDIAB.Models;
 using static YDIAB.Repositories.ListRepository;
+using System.Security.Claims;
 
 namespace YDIAB.Repositories
 {
@@ -17,12 +18,13 @@ namespace YDIAB.Repositories
 
         //Task<Item[]> GetItems(int id, bool includeTags = true);
 
-        public void CreateList(List list);
+        //public void CreateList(List list, string username);
 
-        public void UpdateList(List list);
+        //public IEnumerable<List> CreateList(List list, string username);
+        public ICollection<List> CreateList(List list, string username, StoreUser user);
 
-        public void RemoveListById(int id);
+        public List UpdateList(List list);
 
-        public bool SaveAll();
+        public ICollection<List> RemoveListById(int id, string username);
     }
 }

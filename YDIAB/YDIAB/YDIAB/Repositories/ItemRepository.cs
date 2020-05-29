@@ -19,7 +19,7 @@ namespace YDIAB.Repositories
         }
 
 
-        public async Task<Item> GetItemById(int id, bool includeTags = true)
+        public async Task<Item> GetItemById(int id, bool includeTags)
         {
 
             IQueryable<Item> query = _context.ListItems;
@@ -69,23 +69,18 @@ namespace YDIAB.Repositories
 
 
         // post
-        public void CreateItem(Item item)
+        public void CreateItem(Item item, string username)
         {
             var newTask = new Item();
             newTask.Title = item.Title;
             newTask.ListId = item.ListId;
-            var addTask = _context.ListItems.Add(newTask);
+            _context.ListItems.Add(newTask);
             _context.SaveChanges();
         }
 
-        public class UpdateItemInput
-        {
-            public int id { get; set; }
-            public string title { get; set; }
-        }
 
         // put 
-        public void UpdateItemById(Item item)
+        public Item UpdateItemByModel(Item item)
         {
             //update syntax here
             var result = _context.ListItems.SingleOrDefault(i => i.Id == item.Id);
@@ -93,14 +88,31 @@ namespace YDIAB.Repositories
             {
                 result.Title = item.Title;
                 _context.SaveChanges();
+                return result;
             } else
             {
                 throw new Exception("Update Item failed");
             }
         }
 
+        public Item UpdateSelectedItem(Item model)
+        {
+            //update syntax here
+            var result = _context.ListItems.SingleOrDefault(i => i.Id == model.Id);
+            if (result != null)
+            {
+                result.IsDone = model.IsDone;
+                _context.SaveChanges();
+                return result;
+            }
+            else
+            {
+                throw new Exception("Update Item failed");
+            }
+        }
+
         // delete
-        public void RemoveItemById(int id)
+        public Item RemoveItemById(int id)
         {
             //remove syntax here
             var removeItem = _context.ListItems.SingleOrDefault(i => i.Id == id);
@@ -108,6 +120,7 @@ namespace YDIAB.Repositories
             {
                 var result = _context.ListItems.Remove(removeItem);
                 _context.SaveChanges();
+                return removeItem;
             } else
             {
                 throw new Exception("Remove Item Failed");

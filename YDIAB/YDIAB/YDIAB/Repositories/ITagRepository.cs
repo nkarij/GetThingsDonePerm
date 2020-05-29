@@ -18,6 +18,6 @@ namespace YDIAB.Repositories
         void CreateTag(Tag tag);
         public void UpdateTag(Tag tag);
         //public void UpdateTag(UpdateTagInput model);
-        public void RemoveTagById(int id);
+        public Tag RemoveTagById(int id);
     }
 }

@@ -14,10 +14,12 @@ namespace YDIAB.Repositories
         //public void GetItemAndTags(int listid);
         Task<Item> GetItemById(int id, bool includeTags = true);
         //Task<Tag[]> GetTags(int id, bool includeTags = true);
-        public void CreateItem(Item item);
-        public void UpdateItemById(Item item);
+        public void CreateItem(Item item, string username);
+        public Item UpdateItemByModel(Item item);
         //public void UpdateItemById(UpdateItemInput model);
-        public void RemoveItemById(int id);
+
+        public Item UpdateSelectedItem(Item item);
+        public Item RemoveItemById(int id);
         public bool SaveAll();
 
     }

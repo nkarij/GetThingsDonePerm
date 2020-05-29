@@ -166,9 +166,14 @@ namespace YDIAB.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ListId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ListItems");
                 });
@@ -283,9 +288,9 @@ namespace YDIAB.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "db044848-049a-4d0b-8067-8ba191709b1e",
+                            Id = "17568fe9-1e12-4033-8e1f-a982fab01231",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f6a063b6-044a-42cf-945d-fe17db3ebf7a",
+                            ConcurrencyStamp = "9b53df1a-455c-4ec8-a982-604d44638bd3",
                             Email = "tester@test.com",
                             EmailConfirmed = true,
                             FirstName = "Nanna",
@@ -294,11 +299,11 @@ namespace YDIAB.Migrations
                             NormalizedEmail = "tester@test.com",
                             NormalizedUserName = "tester",
                             Password = "nanna1234",
-                            PasswordHash = "AQAAAAEAACcQAAAAECSBAeWC8IvkQbddQvF0ELUme+HuRDSI+LaUKzYSkQg1tcAlxYNVkoDHbheaLo1rIA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBFoMImR45wG2aWIOFGJvnM+4XNnxBWl7zQDAc1LsTq0lkNT2a1qrix2jkKNuCfaCg==",
                             PhoneNumber = "123456789",
                             PhoneNumberConfirmed = false,
                             RememberUser = false,
-                            SecurityStamp = "08e73a9c-4bdc-498a-8c7d-e86f3fe381ff",
+                            SecurityStamp = "733bd005-5908-46e3-ab33-3ba0460ff0d5",
                             TwoFactorEnabled = false,
                             UserName = "tester@test.com"
                         });
@@ -314,12 +319,22 @@ namespace YDIAB.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ListId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ItemId");
+
+                    b.HasIndex("ListId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ListTags");
                 });
@@ -382,6 +397,10 @@ namespace YDIAB.Migrations
                         .HasForeignKey("ListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("YDIAB.Models.StoreUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("YDIAB.Models.List", b =>
@@ -398,6 +417,14 @@ namespace YDIAB.Migrations
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("YDIAB.Models.List", null)
+                        .WithMany("TagList")
+                        .HasForeignKey("ListId");
+
+                    b.HasOne("YDIAB.Models.StoreUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

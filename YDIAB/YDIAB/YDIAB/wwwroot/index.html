@@ -3,19 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/styles.css" rel="stylesheet" />
     <title>Document</title>
 </head>
 <body>
 
     <div class="index-page-wrapper">
+
+        <h4 class="register-succesfull"></h4>
         <form method="post" id="auth-form">
+            <p>Login</p>
+            <label>User name (email)</label>
             <input type="text" name="authusername" id="">
+            <label>Password </label>
             <input type="text" name="authpassword" id="">
             <input type="checkbox" name="rememberUser" id="">
             <button type="button" name="loginButton"> Login </button>
         </form>
+
+        <form method="post" id="register-form">
+            <p>Register</p>
+            <label>First Name</label>
+            <input type="text" name="registerfirstname" id="">
+            <label>Last Name</label>
+            <input type="text" name="registerlastname" id="">
+            <label>Email</label>
+            <input type="email" name="registerusername" id="">
+            <label>Password</label>
+            <input type="text" name="registerpassword" id="">
+            <button type="button" name="registerButton"> Register </button>
+        </form>
+    
     </div>
 
+    <script src="js/helpers.js"></script>
     <script src="js/fetches.js"></script>
     <script src="js/login.js"></script>
 

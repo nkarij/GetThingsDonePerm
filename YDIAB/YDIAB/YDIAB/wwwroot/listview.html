@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link href="styles.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
     <title>index</title>
 </head>
 <body>
+    <nav>
+        <a href="alllists.html">Home</a>
+        <button type="button" class="logout-button"> Log Out </button>
+    </nav>
+
     <h2>To Do List</h2>
 
     <div class="listview-page-wrapper">
@@ -12,17 +17,17 @@
         <div id="single-list-wrapper">
 
             <h2 class="single-list__heading"></h2>
-            
+
             <button type="button" class="single-list__update">Update List - Name or Description</button>
-            <a href="" class="single-list__delete">Delete List</a>
-                    
+            <a href="alllists.html" class="single-list__delete">Delete List</a>
+
             <div class="update-list-section">
                 <h2>Update List</h2>
-                <form method="post" id="update-list-form">
-                    <label for="updatelistname">Task:</label>
-                    <input name="updatelistname" type="text">
-                    <label for="updatelistdescrip">Task:</label>
-                    <input name="updatelistdescrip" type="text">
+                <form method="post" id="update-list-form" class="update-list-form">
+                    <label for="updatelistname">Name:</label>
+                    <input name="updatelistname" type="text" required>
+                    <label for="updatelistdescrip">Description:</label>
+                    <input name="updatelistdescrip" type="text" required>
                     <button type="button" class="update-list-button">Submit</button>
                 </form>
             </div>
@@ -30,19 +35,22 @@
             <div class="create-task-section">
                 <h2>Create New Task</h2>
                 <form method="post" id="create-task-form">
-                    <label for="createtaskname">Task:</label>
+                    <label for="createtaskname">Task Name:</label>
                     <input name="createtaskname" type="text">
                     <button type="button" class="create-task-button">Submit</button>
                 </form>
             </div>
-    
-            <ul class="single-list__task-list ">
 
+            <ul class="single-list__task-list ">
             </ul>
         </div>
 
     </div>
 
+
+    <script src="js/helpers.js"></script>
+    <script src="js/fetches.js"></script>
+    <script src="js/login.js"></script>
     <script src="js/single-list-script.js"></script>
 </body>
 </html>

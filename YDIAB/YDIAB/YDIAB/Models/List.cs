@@ -19,5 +19,7 @@ namespace YDIAB.Models
         // navigation object? 1 to many
         public ICollection<Item> ItemList { get; set; }
 
+        public ICollection<Tag> TagList { get; set; }
+
     }
 }

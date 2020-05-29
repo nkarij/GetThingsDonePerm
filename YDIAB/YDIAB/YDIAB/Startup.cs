@@ -68,6 +68,7 @@ namespace YDIAB
             services.AddScoped<IListRepository, ListRepository>();
             services.AddScoped<IItemRepository, ItemRepository>();
             services.AddScoped<ITagRepository, TagRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
 
             services.AddAutoMapper(typeof(Startup));
 
