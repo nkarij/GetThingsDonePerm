@@ -168,5 +168,23 @@ namespace YDIAB.Controllers
                 return this.StatusCode(StatusCodes.Status401Unauthorized, "Unauthorized request");
             }
         }
+
+
+        // querystring = /api/items/searchtags/search?term={tagname}
+        [HttpGet("search")]
+        public async Task<ActionResult<ICollection<Task>>> SearchTags(string term)
+        {
+            try
+            {
+                var result = await _itemRepository.GetAllTasksBySearchTermAsync(term);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to search tags: {ex}");
+            }
+
+            return BadRequest("failed to search tags");
+        }
     }
 }

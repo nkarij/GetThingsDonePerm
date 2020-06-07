@@ -21,6 +21,7 @@ namespace YDIAB.Repositories
         public Item UpdateSelectedItem(Item item);
         public Item RemoveItemById(int id);
         public bool SaveAll();
+        public Task<ICollection<Item>> GetAllTasksBySearchTermAsync(string term);
 
     }
 }

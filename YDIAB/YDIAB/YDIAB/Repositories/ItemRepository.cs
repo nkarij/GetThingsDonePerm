@@ -133,5 +133,15 @@ namespace YDIAB.Repositories
             return _context.SaveChanges() > 0;
         }
 
+        public async Task<ICollection<Item>> GetAllTasksBySearchTermAsync(string term)
+        {
+            IQueryable<Item> query = _context.ListItems;
+            query = query
+              .Include(c => c.Tags);
+            query = query.Where(t => t.Title == term);
+            return await query.ToArrayAsync();
+
+        }
+
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using YDIAB.Models;
 using YDIAB.Repositories;
 using YDIAB.Ressources;
@@ -23,11 +24,13 @@ namespace YDIAB.Controllers
 
         private readonly ITagRepository _tagRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<TagsController> _logger;
 
-        public TagsController(ITagRepository tagRepository, IMapper mapper)
+        public TagsController(ITagRepository tagRepository, IMapper mapper, ILogger<TagsController> logger)
         {
             _tagRepository = tagRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
 
@@ -151,5 +154,7 @@ namespace YDIAB.Controllers
                 return this.StatusCode(StatusCodes.Status401Unauthorized, "Unauthorized request");
             }
         }
+
+
     }
 }
